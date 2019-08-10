@@ -8,6 +8,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
+import kotlin.text.Typography.dagger
 
 @Singleton
 @Component(
