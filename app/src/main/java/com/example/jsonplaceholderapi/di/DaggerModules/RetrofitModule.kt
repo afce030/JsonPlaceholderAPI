@@ -1,5 +1,6 @@
 package com.example.jsonplaceholderapi.di.DaggerModules
 
+import com.example.jsonplaceholderapi.Utilities.Constants
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -18,6 +19,7 @@ object RetrofitModule {
 
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(gson)
             .build()
 
     }
