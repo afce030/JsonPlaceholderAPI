@@ -8,4 +8,9 @@ class PostsRepo {
     @Inject
     lateinit var postsWS: PostsWS//This parameter is injected by the Retrofit Module
 
+    //Creating singleton
+    companion object {
+        val instance = PostsRepo()
+    }
+
 }
