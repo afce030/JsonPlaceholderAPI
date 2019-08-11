@@ -35,7 +35,7 @@ class PostsRepo(var postsDAO: PostsDAO, var foundPost: LiveData<List<PostEntity>
 
     fun getPostByIDS(id: Int): LiveData<List<PostEntity>>{
         refreshPosts(id)
-        val data: LiveData<List<PostEntity>> = postsDAO.getAllWords()
+        val data: LiveData<List<PostEntity>> = postsDAO.getAllPosts()
         return data
     }
 
