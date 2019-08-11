@@ -18,7 +18,7 @@ class PostsRepo(var postsDAO: PostsDAO, var foundPost: LiveData<List<PostEntity>
     @Inject
     lateinit var postsWS: PostsWS//This parameter is injected by the Retrofit Module
 
-    //Creating singleton
+    //Creating singleton with parameters
     companion object {
         var instance: PostsRepo? = null
 
