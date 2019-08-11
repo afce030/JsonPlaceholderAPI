@@ -10,7 +10,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class PostsRepo(postsDAO: PostsDAO) {
+class PostsRepo(var postsDAO: PostsDAO, var foundPost: LiveData<List<PostEntity>>) {
 
     @Inject
     lateinit var postsWS: PostsWS//This parameter is injected by the Retrofit Module
@@ -22,22 +22,20 @@ class PostsRepo(postsDAO: PostsDAO) {
 
     fun getPostByIDS(id: Int): LiveData<List<PostEntity>>{
         refreshPosts(id)
-        return
+        return postsDAO.getAllWords()
     }
 
     fun refreshPosts(id: Int){
         val call = postsWS.getPostByID(id)
-        call.enqueue(object : Callback<PostDTO>{
-            override fun onResponse(call: Call<PostDTO>, response: Response<PostDTO>) {
-
+        call.enqueue(object : Callback<List<PostDTO>>{
+            override fun onResponse(call: Call<List<PostDTO>>, response: Response<List<PostDTO>>) {
                 if(response.isSuccessful){
-
-                    val posts: List<PostDTO> = response.body()
-
+                    val posts: List<PostDTO>? = response.body()
+                    //Insert movie by room
                 }
-
             }
-            override fun onFailure(call: Call<PostDTO>, t: Throwable) {
+
+            override fun onFailure(call: Call<List<PostDTO>>, t: Throwable) {
             }
         })
     }
