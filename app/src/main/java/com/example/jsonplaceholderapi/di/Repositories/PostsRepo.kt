@@ -1,6 +1,8 @@
 package com.example.jsonplaceholderapi.di.Repositories
 
+import android.app.Application
 import android.content.Context
+import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.example.jsonplaceholderapi.API_connections.PostsWS
@@ -13,7 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class PostsRepo(var postsDAO: PostsDAO, var foundPost: LiveData<List<PostEntity>>) {
+class PostsRepo(application: Application, var postsDAO: PostsDAO, var foundPost: LiveData<List<PostEntity>>) {
 
     @Inject
     lateinit var postsWS: PostsWS//This parameter is injected by the Retrofit Module
@@ -22,10 +24,10 @@ class PostsRepo(var postsDAO: PostsDAO, var foundPost: LiveData<List<PostEntity>
     companion object {
         var instance: PostsRepo? = null
 
-        fun getRepoInstance(PostsDAO: PostsDAO, FoundPost: LiveData<List<PostEntity>>): PostsRepo? {
+        fun getRepoInstance(Application: Application ,PostsDAO: PostsDAO, FoundPost: LiveData<List<PostEntity>>): PostsRepo? {
             if (instance == null) {
                 synchronized(PostsRepo::class) {
-                    instance = PostsRepo(PostsDAO, FoundPost)
+                    instance = PostsRepo(Application, PostsDAO, FoundPost)
                 }
             }
             return instance
@@ -52,6 +54,17 @@ class PostsRepo(var postsDAO: PostsDAO, var foundPost: LiveData<List<PostEntity>
             override fun onFailure(call: Call<List<PostDTO>>, t: Throwable) {
             }
         })
+    }
+
+    private class InsertAsyncTask(val postsDAO: PostsDAO) :
+        AsyncTask<PostEntity, Void, Void>() {
+        override fun doInBackground(vararg postEntity: PostEntity?): Void? {
+            for(post in postEntity) {
+                if (post != null) postsDAO.insert(post)
+            }
+            return null
+        }
+
     }
 
 }
