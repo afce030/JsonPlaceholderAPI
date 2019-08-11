@@ -8,6 +8,6 @@ import retrofit2.http.Path
 interface PostsWS {
 
     @GET("post/{id}")
-    fun getPostByID(@Path("id") number: Int) : Call<PostDTO>
+    fun getPostByID(@Path("id") number: Int) : Call<List<PostDTO>>
 
 }
