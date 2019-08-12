@@ -10,7 +10,7 @@ import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
 interface PostsDAO {
 
     @Query("SELECT * from posts_table ORDER BY id ASC")
-    fun getAllPosts(): LiveData<List<PostEntity>>
+    fun getAllPostsFromRoom(): LiveData<List<PostEntity>>
 
     @Insert
     fun insert(postEntity: PostEntity)

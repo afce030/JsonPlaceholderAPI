@@ -9,10 +9,10 @@ import com.example.jsonplaceholderapi.di.Repositories.PostsRepo
 class postViewModel(application: Application) : AndroidViewModel(application){
 
     private var posts : LiveData<List<PostEntity>>? = null
-    private val repo = PostsRepo(application)
+    private val repo = PostsRepo.getRepoInstance(application)
 
-    fun getAllPost(){
-        posts = repo.getPostByIDS(1)
+    fun getAllPostViewModel(){
+        posts = repo!!.getPostsFromRepo()
     }
 
 }

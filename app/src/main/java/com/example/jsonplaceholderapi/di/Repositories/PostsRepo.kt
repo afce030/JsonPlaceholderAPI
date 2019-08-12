@@ -1,10 +1,8 @@
 package com.example.jsonplaceholderapi.di.Repositories
 
 import android.app.Application
-import android.content.Context
 import android.os.AsyncTask
 import androidx.lifecycle.LiveData
-import androidx.room.Room
 import com.example.jsonplaceholderapi.API_connections.PostsWS
 import com.example.jsonplaceholderapi.LocalData.RoomDAO.PostsDAO
 import com.example.jsonplaceholderapi.LocalData.RoomDatabases.PostDatabase
@@ -17,8 +15,8 @@ import javax.inject.Inject
 
 class PostsRepo(application: Application) {
 
-    var postsDAO: PostsDAO = PostDatabase.instance
-    var foundPost: LiveData<List<PostEntity>>
+    var postsDAO: PostsDAO = PostDatabase.getPostDataBase(application)!!.postsDao()
+    var foundPost: LiveData<List<PostEntity>> = postsDAO.getAllPostsFromRoom()
 
     @Inject
     lateinit var postsWS: PostsWS//This parameter is injected by the Retrofit Module
@@ -27,7 +25,7 @@ class PostsRepo(application: Application) {
     companion object {
         var instance: PostsRepo? = null
 
-        fun getRepoInstance(Application: Application ,PostsDAO: PostsDAO, FoundPost: LiveData<List<PostEntity>>): PostsRepo? {
+        fun getRepoInstance(Application: Application): PostsRepo? {
             if (instance == null) {
                 synchronized(PostsRepo::class) {
                     instance = PostsRepo(Application)
@@ -38,19 +36,23 @@ class PostsRepo(application: Application) {
 
     }
 
-    fun getPostByIDS(id: Int): LiveData<List<PostEntity>>{
-        refreshPosts(id)
-        val data: LiveData<List<PostEntity>> = postsDAO.getAllPosts()
-        return data
+    fun getPostsFromRepo(): LiveData<List<PostEntity>>{
+        refreshPosts()
+        foundPost = postsDAO.getAllPostsFromRoom()
+        return foundPost
     }
 
-    fun refreshPosts(id: Int){
-        val call = postsWS.getPostByID(id)
+    fun refreshPosts(){
+        val call = postsWS.getPostsFromAPI()
         call.enqueue(object : Callback<List<PostDTO>>{
             override fun onResponse(call: Call<List<PostDTO>>, response: Response<List<PostDTO>>) {
                 if(response.isSuccessful){
-                    val posts: List<PostDTO>? = response.body()
+                    val posts: List<PostDTO> = response.body()!!
                     //Insert movie by room
+                    for(p in posts){
+                        val f: PostEntity = PostEntity(p.id.toString(), p.userId.toString(), p.title!!, p.body!!)
+                        InsertAsyncTask(postsDAO).execute(f)
+                    }
                 }
             }
 
