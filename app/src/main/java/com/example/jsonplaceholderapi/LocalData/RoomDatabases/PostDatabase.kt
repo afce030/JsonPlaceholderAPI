@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.jsonplaceholderapi.LocalData.RoomDAO.PostsDAO
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
 
 @Database(entities = [PostEntity::class], version = 1, exportSchema = false)
 abstract class PostDatabase: RoomDatabase() {
+
+    abstract fun postsDao(): PostsDAO
 
     //Singleton with context as parameter
     companion object {
