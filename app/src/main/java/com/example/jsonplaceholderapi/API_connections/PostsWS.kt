@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface PostsWS {
 
-    @GET("post/")
+    @GET("posts/")
     fun getPostsFromAPI() : Call<List<PostDTO>>
 
 }

@@ -11,7 +11,9 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        component = DaggerRetrofitComponent.builder().build()
+        component = DaggerRetrofitComponent.builder().retrofitModule(RetrofitModule).build()
     }
+
+    fun getRetrofitComponent() = component
 
 }

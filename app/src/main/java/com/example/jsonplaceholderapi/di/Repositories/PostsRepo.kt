@@ -4,10 +4,12 @@ import android.app.Application
 import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import com.example.jsonplaceholderapi.API_connections.PostsWS
+import com.example.jsonplaceholderapi.App
 import com.example.jsonplaceholderapi.LocalData.RoomDAO.PostsDAO
 import com.example.jsonplaceholderapi.LocalData.RoomDatabases.PostDatabase
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
 import com.example.jsonplaceholderapi.POJO_classes.PostDTO
+import com.example.jsonplaceholderapi.di.DaggerComponents.DaggerRetrofitComponent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,10 +27,11 @@ class PostsRepo(application: Application) {
     companion object {
         var instance: PostsRepo? = null
 
-        fun getRepoInstance(Application: Application): PostsRepo? {
+        fun getRepoInstance(application: Application): PostsRepo? {
             if (instance == null) {
                 synchronized(PostsRepo::class) {
-                    instance = PostsRepo(Application)
+                    instance = PostsRepo(application)
+                    (application as App).getRetrofitComponent().inject(instance!!)
                 }
             }
             return instance
@@ -50,7 +53,7 @@ class PostsRepo(application: Application) {
                     val posts: List<PostDTO> = response.body()!!
                     //Insert movie by room
                     for(p in posts){
-                        val f: PostEntity = PostEntity(p.id.toString(), p.userId.toString(), p.title!!, p.body!!)
+                        val f = PostEntity(p.id.toString(), p.userId.toString(), p.title!!, p.body!!)
                         InsertAsyncTask(postsDAO).execute(f)
                     }
                 }
