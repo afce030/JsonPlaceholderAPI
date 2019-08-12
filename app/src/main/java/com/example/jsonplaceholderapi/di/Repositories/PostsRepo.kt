@@ -15,7 +15,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class PostsRepo(application: Application, var postsDAO: PostsDAO, var foundPost: LiveData<List<PostEntity>>) {
+class PostsRepo(application: Application) {
+
+    var postsDAO: PostsDAO = PostDatabase.instance
+    var foundPost: LiveData<List<PostEntity>>
 
     @Inject
     lateinit var postsWS: PostsWS//This parameter is injected by the Retrofit Module
@@ -27,7 +30,7 @@ class PostsRepo(application: Application, var postsDAO: PostsDAO, var foundPost:
         fun getRepoInstance(Application: Application ,PostsDAO: PostsDAO, FoundPost: LiveData<List<PostEntity>>): PostsRepo? {
             if (instance == null) {
                 synchronized(PostsRepo::class) {
-                    instance = PostsRepo(Application, PostsDAO, FoundPost)
+                    instance = PostsRepo(Application)
                 }
             }
             return instance
