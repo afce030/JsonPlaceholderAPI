@@ -5,9 +5,11 @@ import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import com.example.jsonplaceholderapi.API_connections.PostsWS
 import com.example.jsonplaceholderapi.App
+import com.example.jsonplaceholderapi.LocalData.RoomDAO.FavoritesDAO
 import com.example.jsonplaceholderapi.LocalData.RoomDAO.PostsDAO
 import com.example.jsonplaceholderapi.LocalData.RoomDAO.UsersDAO
 import com.example.jsonplaceholderapi.LocalData.RoomDatabases.PostDatabase
+import com.example.jsonplaceholderapi.LocalData.RoomEntities.FavoritesEntity
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.UserEntity
 import com.example.jsonplaceholderapi.POJO_classes.PostDTO
@@ -21,6 +23,9 @@ class PostsRepo(application: Application) {
 
     var postsDAO: PostsDAO = PostDatabase.getPostDataBase(application)!!.postsDao()
     var foundPosts: LiveData<List<PostEntity>> = postsDAO.getAllPostsFromRoom()
+
+    var favoritesDAO: FavoritesDAO = PostDatabase.getPostDataBase(application)!!.favoritesDao()
+    var favoritePosts: LiveData<List<FavoritesEntity>> = favoritesDAO.getAllFavoritesFromRoom()
 
     var usersDAO: UsersDAO = PostDatabase.getPostDataBase(application)!!.usersDao()
     var foundUsers: LiveData<List<UserEntity>> = usersDAO.getAllUsersFromRoom()
@@ -40,6 +45,29 @@ class PostsRepo(application: Application) {
                 }
             }
             return instance
+        }
+
+    }
+
+
+    fun getFavoritesFromRepo(): LiveData<List<FavoritesEntity>>{
+        favoritePosts = favoritesDAO.getAllFavoritesFromRoom()
+        return favoritePosts
+    }
+
+    fun insertFavorite(postEntity: PostEntity){
+        val favorite: FavoritesEntity = FavoritesEntity(postEntity.id,postEntity.userId,
+            postEntity.title,postEntity.body)
+        InsertFavoriteAsyncTask(favoritesDAO).execute(favorite)
+    }
+
+    private class InsertFavoriteAsyncTask(val favoritesDAO: FavoritesDAO) :
+        AsyncTask<FavoritesEntity, Void, Void>() {
+        override fun doInBackground(vararg favoritesEntity: FavoritesEntity?): Void? {
+            for(post in favoritesEntity) {
+                if (post != null) favoritesDAO.insert(post)
+            }
+            return null
         }
 
     }

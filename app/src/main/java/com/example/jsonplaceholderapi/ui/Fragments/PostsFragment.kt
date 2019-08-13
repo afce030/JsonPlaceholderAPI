@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
@@ -42,6 +44,7 @@ class PostsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    private lateinit var recycler: RecyclerView
 
     private lateinit var postViewModel: postViewModel
     private val adapter = PostsAdapter(ArrayList(), ArrayList(), context)
@@ -64,11 +67,12 @@ class PostsFragment : Fragment() {
         postViewModel = postViewModel(activity!!.application)
 
         val layout = LinearLayoutManager(context, RecyclerView.VERTICAL,false)
-        val recycler = vista.findViewById<RecyclerView>(R.id.rvAllPosts)
+        recycler = vista.findViewById<RecyclerView>(R.id.rvAllPosts)
         recycler.adapter = adapter
         recycler.layoutManager = layout
 
         addObserverViewModel()
+        setRecyclerViewItemTouchListener()
 
         return vista
     }
@@ -87,7 +91,32 @@ class PostsFragment : Fragment() {
             }
         }
         postViewModel.getAllUsersViewModel().observe(this, observer2)
+
     }
+
+
+    private fun setRecyclerViewItemTouchListener() {
+
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, viewHolder1: RecyclerView.ViewHolder): Boolean {
+
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+
+                val position = viewHolder.adapterPosition
+                postViewModel.inserFavoriteVM(adapter.posts.get(position))
+                Toast.makeText(context,"Añadido a favoritos", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(recycler)
+    }
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {

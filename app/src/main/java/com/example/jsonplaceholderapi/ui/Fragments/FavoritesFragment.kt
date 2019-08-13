@@ -10,12 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jsonplaceholderapi.LocalData.RoomEntities.FavoritesEntity
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.UserEntity
 
 import com.example.jsonplaceholderapi.R
+import com.example.jsonplaceholderapi.ui.Adapters.FavoritesAdapter
 import com.example.jsonplaceholderapi.ui.Adapters.PostsAdapter
 import com.example.jsonplaceholderapi.ui.Adapters.ViewPagerAdapter
 import com.example.jsonplaceholderapi.ui.ViewModels.postViewModel
@@ -40,9 +43,10 @@ class FavoritesFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    private lateinit var recycler: RecyclerView
 
     private lateinit var postViewModel: postViewModel
-    private val adapter = PostsAdapter(ArrayList(), ArrayList(), context)
+    private val adapter = FavoritesAdapter(ArrayList(), ArrayList(), context)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +66,7 @@ class FavoritesFragment : Fragment() {
         postViewModel = postViewModel(activity!!.application)
 
         val layout = LinearLayoutManager(context, RecyclerView.VERTICAL,false)
-        val recycler = vista.findViewById<RecyclerView>(R.id.rvFavoritePosts)
+        recycler = vista.findViewById<RecyclerView>(R.id.rvFavoritePosts)
         recycler.adapter = adapter
         recycler.layoutManager = layout
 
@@ -73,12 +77,12 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun addObserverViewModel() {
-        val observer1 = Observer<List<PostEntity>> { posts ->
+        val observer1 = Observer<List<FavoritesEntity>> { posts ->
             if (posts != null) {
                 adapter.refreshPost(posts)
             }
         }
-        postViewModel.getAllPostViewModel().observe(this, observer1)
+        postViewModel.getFavoritesViewModel().observe(this, observer1)
 
         val observer2 = Observer<List<UserEntity>> { users ->
             if (users != null) {
@@ -87,6 +91,7 @@ class FavoritesFragment : Fragment() {
         }
         postViewModel.getAllUsersViewModel().observe(this, observer2)
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {

@@ -10,7 +10,7 @@ class UserInfo : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_info)
 
-        tvIdUI.text = "Id: "+ intent.getIntExtra("id_user",0).toString()
+        tvIdUI.text = "Id: "+ intent.getStringExtra("id_user")
         tvUserName.text = "Nombre: "+intent.getStringExtra("nombre")
         tvWebsite.text = "Sitio web: "+intent.getStringExtra("website")
         tvCity.text = "Ciudad: "+intent.getStringExtra("city")
@@ -18,5 +18,14 @@ class UserInfo : AppCompatActivity() {
         tvCompanyName.text = "Compañia: "+intent.getStringExtra("company")
         tvEmail.text = "Email: "+intent.getStringExtra("email")
 
+        btnBack.setOnClickListener{
+            finish()
+        }
+
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }

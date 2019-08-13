@@ -3,9 +3,9 @@ package com.example.jsonplaceholderapi.ui.Adapters
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jsonplaceholderapi.LocalData.RoomEntities.FavoritesEntity
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.UserEntity
 import com.example.jsonplaceholderapi.R
@@ -13,9 +13,9 @@ import com.example.jsonplaceholderapi.UserInfo
 import com.example.jsonplaceholderapi.ui.Holders.PostsHolder
 import kotlinx.android.synthetic.main.post_item.view.*
 
-class PostsAdapter(var posts: MutableList<PostEntity>, var users: MutableList<UserEntity>, var context: Context?) : RecyclerView.Adapter<PostsHolder>() {
+class FavoritesAdapter(var posts: MutableList<FavoritesEntity>, var users: MutableList<UserEntity>, var context: Context?): RecyclerView.Adapter<PostsHolder>() {
 
-    fun refreshPost(postList: List<PostEntity>){
+    fun refreshPost(postList: List<FavoritesEntity>){
         posts = ArrayList()
         if(users.size>0) {
             posts.addAll(postList)
