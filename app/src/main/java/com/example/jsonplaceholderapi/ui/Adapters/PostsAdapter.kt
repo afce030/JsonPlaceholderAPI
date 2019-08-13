@@ -9,7 +9,7 @@ import com.example.jsonplaceholderapi.R
 import com.example.jsonplaceholderapi.ui.Holders.PostsHolder
 import kotlinx.android.synthetic.main.post_item.view.*
 
-class PostsAdapter(var posts: MutableList<PostEntity>, val context: Context) : RecyclerView.Adapter<PostsHolder>() {
+class PostsAdapter(var posts: MutableList<PostEntity>) : RecyclerView.Adapter<PostsHolder>() {
 
     fun refreshPost(postList: List<PostEntity>){
         posts = ArrayList()
