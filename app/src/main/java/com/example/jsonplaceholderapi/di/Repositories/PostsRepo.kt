@@ -73,9 +73,13 @@ class PostsRepo(application: Application) {
     }
 
     fun getPostsFromRepo(): LiveData<List<PostEntity>>{
-        refreshPosts()
+        //refreshPosts()
         foundPosts = postsDAO.getAllPostsFromRoom()
         return foundPosts
+    }
+
+    fun deletePosts(){
+        deletePostAsyncTask(postsDAO).execute()
     }
 
     fun refreshPosts(){
@@ -108,6 +112,13 @@ class PostsRepo(application: Application) {
 
     }
 
+    private class deletePostAsyncTask(val postsDAO: PostsDAO) :
+        AsyncTask<Void, Void, Void>() {
+        override fun doInBackground(vararg params: Void?): Void? {
+            postsDAO.deleteAll()
+            return null
+        }
+    }
 
     fun getUsersFromRepo(): LiveData<List<UserEntity>>{
         refreshUsers()

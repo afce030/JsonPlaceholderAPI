@@ -1,7 +1,5 @@
 package com.example.jsonplaceholderapi.ui.Fragments
 
-import android.app.Application
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,9 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,9 +16,8 @@ import com.example.jsonplaceholderapi.LocalData.RoomEntities.UserEntity
 
 import com.example.jsonplaceholderapi.R
 import com.example.jsonplaceholderapi.ui.Adapters.PostsAdapter
-import com.example.jsonplaceholderapi.ui.Adapters.ViewPagerAdapter
 import com.example.jsonplaceholderapi.ui.ViewModels.postViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_posts.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,6 +68,14 @@ class PostsFragment : Fragment() {
         addObserverViewModel()
         setRecyclerViewItemTouchListener()
 
+        vista.btnRefresh.setOnClickListener{ vista ->
+            postViewModel.refresh()
+        }
+
+        vista.btnErase.setOnClickListener { vista ->
+            postViewModel.delete()
+        }
+
         return vista
     }
 
@@ -109,6 +111,7 @@ class PostsFragment : Fragment() {
                 postViewModel.inserFavoriteVM(adapter.posts.get(position))
                 Toast.makeText(context,"Añadido a favoritos", Toast.LENGTH_SHORT).show()
             }
+
         }
 
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)

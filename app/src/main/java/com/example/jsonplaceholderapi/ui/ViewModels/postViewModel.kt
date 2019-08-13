@@ -16,6 +16,14 @@ class postViewModel(application: Application) : AndroidViewModel(application){
     private var users : LiveData<List<UserEntity>>? = null
     private val repo = PostsRepo.getRepoInstance(application)
 
+    fun refresh(){
+        repo!!.refreshPosts()
+    }
+
+    fun delete(){
+        repo!!.deletePosts()
+    }
+
     fun getAllPostViewModel(): LiveData<List<PostEntity>>{
         posts = repo!!.getPostsFromRepo()
         return posts!!
