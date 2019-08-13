@@ -9,7 +9,7 @@ class PostEntity(
 
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: String,
+    val id: Int,
 
     @ColumnInfo(name = "userId")
     val userId: String,

@@ -5,15 +5,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
+import com.example.jsonplaceholderapi.LocalData.RoomEntities.UserEntity
 import com.example.jsonplaceholderapi.R
 import com.example.jsonplaceholderapi.ui.Holders.PostsHolder
 import kotlinx.android.synthetic.main.post_item.view.*
 
-class PostsAdapter(var posts: MutableList<PostEntity>) : RecyclerView.Adapter<PostsHolder>() {
+class PostsAdapter(var posts: MutableList<PostEntity>, var users: MutableList<UserEntity>) : RecyclerView.Adapter<PostsHolder>() {
 
     fun refreshPost(postList: List<PostEntity>){
         posts = ArrayList()
-        posts.addAll(postList)
+        if(users.size>0) {
+            posts.addAll(postList)
+        }
+        notifyDataSetChanged()
+    }
+
+    fun refreshUsers(userList: List<UserEntity>){
+        users.addAll(userList)
         notifyDataSetChanged()
     }
 
@@ -27,9 +35,12 @@ class PostsAdapter(var posts: MutableList<PostEntity>) : RecyclerView.Adapter<Po
     }
 
     override fun onBindViewHolder(holder: PostsHolder, position: Int) {
-        holder.itemView.tvId.setText(posts.get(position).id)
+        holder.itemView.tvId.setText(posts.get(position).id.toString())
         holder.itemView.tvTitle.setText(posts.get(position).title)
-        holder.itemView.tvUserId.setText(posts.get(position).userId)
+
+        val pos:Int = posts.get(position).userId.toInt()
+        holder.itemView.tvUserId.setText(users.get(pos - 1).username)
+
         holder.itemView.tvBody.setText(posts.get(position).body)
     }
 }

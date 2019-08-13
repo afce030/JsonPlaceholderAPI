@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
+import com.example.jsonplaceholderapi.LocalData.RoomEntities.UserEntity
 
 import com.example.jsonplaceholderapi.R
 import com.example.jsonplaceholderapi.ui.Adapters.PostsAdapter
@@ -41,7 +42,7 @@ class FavoritesFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
 
     private lateinit var postViewModel: postViewModel
-    private val adapter = PostsAdapter(ArrayList())
+    private val adapter = PostsAdapter(ArrayList(), ArrayList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,12 +73,19 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun addObserverViewModel() {
-        val observer = Observer<List<PostEntity>> { posts ->
+        val observer1 = Observer<List<PostEntity>> { posts ->
             if (posts != null) {
                 adapter.refreshPost(posts)
             }
         }
-        postViewModel.getAllPostViewModel().observe(this, observer)
+        postViewModel.getAllPostViewModel().observe(this, observer1)
+
+        val observer2 = Observer<List<UserEntity>> { users ->
+            if (users != null) {
+                adapter.refreshUsers(users)
+            }
+        }
+        postViewModel.getAllUsersViewModel().observe(this, observer2)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
