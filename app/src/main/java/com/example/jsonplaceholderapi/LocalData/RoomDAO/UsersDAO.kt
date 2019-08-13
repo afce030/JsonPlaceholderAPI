@@ -5,18 +5,18 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
+import com.example.jsonplaceholderapi.LocalData.RoomEntities.UserEntity
 
 @Dao
-interface PostsDAO {
+interface UsersDAO {
 
-    @Query("SELECT * from posts_table ORDER BY id ASC")
-    fun getAllPostsFromRoom(): LiveData<List<PostEntity>>
+    @Query("SELECT * from users_table ORDER BY id ASC")
+    fun getAllUsersFromRoom(): LiveData<List<UserEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(postEntity: PostEntity)
+    fun insert(userEntity: UserEntity)
 
-    @Query("DELETE FROM posts_table")
+    @Query("DELETE FROM users_table")
     fun deleteAll()
 
 }

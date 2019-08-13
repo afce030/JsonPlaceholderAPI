@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "posts_table")
-class PostEntity(
+@Entity(tableName = "favorites_table")
+class FavoritesEntity (
 
     @PrimaryKey
     @ColumnInfo(name = "id")
