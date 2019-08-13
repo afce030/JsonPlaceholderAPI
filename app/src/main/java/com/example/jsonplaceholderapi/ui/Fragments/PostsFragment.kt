@@ -44,7 +44,7 @@ class PostsFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
 
     private lateinit var postViewModel: postViewModel
-    private val adapter = PostsAdapter(ArrayList(), ArrayList())
+    private val adapter = PostsAdapter(ArrayList(), ArrayList(), context)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

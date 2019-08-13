@@ -1,16 +1,19 @@
 package com.example.jsonplaceholderapi.ui.Adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.PostEntity
 import com.example.jsonplaceholderapi.LocalData.RoomEntities.UserEntity
 import com.example.jsonplaceholderapi.R
+import com.example.jsonplaceholderapi.UserInfo
 import com.example.jsonplaceholderapi.ui.Holders.PostsHolder
 import kotlinx.android.synthetic.main.post_item.view.*
 
-class PostsAdapter(var posts: MutableList<PostEntity>, var users: MutableList<UserEntity>) : RecyclerView.Adapter<PostsHolder>() {
+class PostsAdapter(var posts: MutableList<PostEntity>, var users: MutableList<UserEntity>, var context: Context?) : RecyclerView.Adapter<PostsHolder>() {
 
     fun refreshPost(postList: List<PostEntity>){
         posts = ArrayList()
@@ -27,6 +30,7 @@ class PostsAdapter(var posts: MutableList<PostEntity>, var users: MutableList<Us
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
+        context = parent.context
         return PostsHolder(v)
     }
 
@@ -42,5 +46,20 @@ class PostsAdapter(var posts: MutableList<PostEntity>, var users: MutableList<Us
         holder.itemView.tvUserId.setText(users.get(pos - 1).username)
 
         holder.itemView.tvBody.setText(posts.get(position).body)
+
+        holder.itemView.setOnClickListener {
+
+            val intent = Intent(context, UserInfo::class.java)
+            intent.putExtra("id_user",users.get(position).id_user)
+            intent.putExtra("nombre",users.get(position).name)
+            intent.putExtra("website",users.get(position).website)
+            intent.putExtra("city",users.get(position).city)
+            intent.putExtra("phone",users.get(position).phone)
+            intent.putExtra("company",users.get(position).companyName)
+            intent.putExtra("email",users.get(position).email)
+            context?.startActivity(intent)
+
+        }
+
     }
 }
